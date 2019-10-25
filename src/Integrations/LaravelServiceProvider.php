@@ -24,8 +24,10 @@ class LaravelServiceProvider extends ServiceProvider
             __DIR__ . '/../config/sqs-plain.php' => config_path('sqs-plain.php')
         ]);
 
-        Queue::after(function (JobProcessed $event) {
-            $event->job->delete();
+        Queue::after(function ($event) {
+            if ($event instanceof JobProcessed) {
+                $event->job->delete();
+            }
         });
     }
 
